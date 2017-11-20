@@ -2,7 +2,9 @@ package soa.jaxrslabs.booktrainrestwebserviceexcercice2;
 
 import java.util.List;
 
-import javax.ws.rs.GET;  
+import javax.ejb.EJB;
+import javax.ws.rs.GET;
+import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
@@ -15,6 +17,25 @@ import javax.ws.rs.core.Response.Status;
 public class TrainResource {
 
 	public TrainResource() {
+	}
+	
+	@EJB
+	private TrainTransaction tt;
+	
+	@POST
+	public Response createTrain(@QueryParam("departure") String departure, @QueryParam("arrival") String arrival, @QueryParam("departureTime") int departureTime) {
+		Train train = new Train();
+		
+		train.setVilleDepart(departure);
+		train.setVilleArrivee(arrival);
+		train.setHeureDepart(departureTime);
+		
+		tt.addTrain(train);
+		
+		return Response
+				.status(Status.OK)
+				.entity(train)//.entity("<books> Book number : " + bookTrain.getNumBook() + ", Train : " + bookTrain.getCurrentTrain().getNumTrain() + ", Nombre de places : " + bookTrain.getNumberPlaces() + "</books>")
+				.build();
 	}
 	
 	@GET

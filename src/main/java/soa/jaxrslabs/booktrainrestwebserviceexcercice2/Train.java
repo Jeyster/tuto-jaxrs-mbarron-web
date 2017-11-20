@@ -3,23 +3,23 @@ package soa.jaxrslabs.booktrainrestwebserviceexcercice2;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+
+@Entity
 public class Train {
 	
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private String numTrain;
-	private String villeDepart;
-	private String villeArrivee;
-    private int heureDepart; // Format : 1230 = 12h30
 	
-    public Train() {
-	}
-
-	public Train(String numTrain, String villeDepart, String villeArrivee, int heureDepart) {
-		super();
-		this.numTrain = numTrain;
-		this.villeDepart = villeDepart;
-		this.villeArrivee = villeArrivee;
-		this.heureDepart = heureDepart;
-	}
+	private String villeDepart;
+	
+	private String villeArrivee;
+	
+    private int heureDepart; // Format : 1230 = 12h30
 
 	public String getNumTrain() {
 		return numTrain;
