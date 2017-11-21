@@ -1,8 +1,8 @@
 package soa.jaxrslabs.booktrainrestwebserviceexcercice2;
 
-import java.util.ArrayList;
 import java.util.List;
 
+import javax.ejb.EJB;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
@@ -13,66 +13,63 @@ import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
 
-@Path("/books")
+@Path("books")
+@Produces("application/json")
 public class BookTrainResource {
 
 	public BookTrainResource() {
 	}
 	
+	@EJB
+	private BookTrainTransaction bt;
+	
+	@EJB
+	private TrainTransaction tt;
+	
 	@GET
-	@Produces("application/xml")
 	public Response getBookTrains() {
-		List<BookTrain> books = BookTrainBD.getBookTrains();
-		List<String> numBooks = new ArrayList<>();
-		for (BookTrain book : books) {
-			numBooks.add(book.getNumBook());
-		}
+		List<BookTrain> books = bt.getBookTrain();
 		
 		return Response
 				.status(Status.OK)
-				.entity("<books>" + numBooks + "</books>")
+				.entity(books)
 				.build();
 	}
 	
 	@POST
-	//@Produces("application/xml")
-	public Response createBookTrain(@QueryParam("numTrain") String numTrain, @QueryParam("numberPlaces") int numberPlaces) {
-		Train train = Train.getTrainByNumTrain(numTrain);
+	public Response createBookTrain(@QueryParam("numTrain") Integer numTrain, @QueryParam("numberPlaces") int numberPlaces) {
+		Train train = tt.getTrainById(numTrain);
 		
 		BookTrain bookTrain = new BookTrain();
 		bookTrain.setCurrentTrain(train);
 		bookTrain.setNumberPlaces(numberPlaces);
-		bookTrain.setNumBook(Long.toString(System.currentTimeMillis()));
 		
-		if (train != null && numberPlaces != 0) {
-			BookTrainBD.getBookTrains().add(bookTrain);
-		}
+		bt.addBookTrain(bookTrain);
 		
 		return Response
 				.status(Status.OK)
-				.entity(bookTrain.getNumBook())//.entity("<books> Book number : " + bookTrain.getNumBook() + ", Train : " + bookTrain.getCurrentTrain().getNumTrain() + ", Nombre de places : " + bookTrain.getNumberPlaces() + "</books>")
+				.entity(bookTrain)
 				.build();
 	}
 	
-	
 	@GET
-	@Path("/{numBook}")
-	public Response getBookTrain(@PathParam("numBook") String numBook) {
-		BookTrain book = BookTrain.getBookByNumBook(numBook);
+	@Path("{numBook}")
+	public Response getBookTrainById(@PathParam("numBook") Integer numBook) {
+		BookTrain book = bt.getBookByNumBook(numBook);
 		return Response
 				.status(Status.OK)
-				.entity("<train>" + book + "</train>")
+				.entity(book)
 				.build();			
 
 	}
 	
 	@DELETE
-	@Path("/{numBook}")
-	public Response deleteBookTrain(@PathParam("numBook") String numBook) {
-		BookTrain.deleteBookByNumBook(numBook);
+	@Path("{numBook}")
+	public Response deleteBookTrainById(@PathParam("numBook") Integer numBook) {
+		BookTrain bookTrain = bt.deleteBookById(numBook);
 		return Response
 				.status(Status.OK)
-				.entity("<train>" + numBook + "</train>")
+				.entity(bookTrain)
 				.build();	
 	}
 	

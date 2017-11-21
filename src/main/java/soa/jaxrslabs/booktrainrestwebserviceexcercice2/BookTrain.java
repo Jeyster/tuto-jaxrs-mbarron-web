@@ -2,19 +2,30 @@ package soa.jaxrslabs.booktrainrestwebserviceexcercice2;
 
 import java.util.List;
 
-import javax.xml.bind.annotation.XmlRootElement;
+import javax.persistence.CascadeType;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.ManyToOne;
 
-@XmlRootElement(name = "bookTrain")
+@Entity
 public class BookTrain {
 	
-	private String numBook;
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private Integer numBook;
+	
+	@ManyToOne(cascade = {CascadeType.MERGE, CascadeType.PERSIST}, fetch = FetchType.EAGER)
 	private Train currentTrain;
+	
 	private int numberPlaces;
 	
-	public String getNumBook() {
+	public Integer getNumBook() {
 		return numBook;
 	}
-	public void setNumBook(String numBook) {
+	public void setNumBook(Integer numBook) {
 		this.numBook = numBook;
 	}
 	public Train getCurrentTrain() {

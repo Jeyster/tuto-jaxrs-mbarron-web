@@ -13,7 +13,7 @@ import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
 
 @Path("trains")
-@Produces("application/xml")
+@Produces("application/json")
 public class TrainResource {
 
 	public TrainResource() {
@@ -34,45 +34,42 @@ public class TrainResource {
 		
 		return Response
 				.status(Status.OK)
-				.entity(train)//.entity("<books> Book number : " + bookTrain.getNumBook() + ", Train : " + bookTrain.getCurrentTrain().getNumTrain() + ", Nombre de places : " + bookTrain.getNumberPlaces() + "</books>")
+				.entity(train)
 				.build();
 	}
 	
 	@GET
 	public Response getTrains() {
-		System.out.println("getTrains : " + BookTrainBD.getTrains());		
+		List<Train> trains = tt.getTrains();		
 		return Response
 				.status(Status.OK)
-				.entity("<trains>" + BookTrainBD.getTrains() + "</trains>")
+				.entity(trains)
 				.build();
 	}
 	
 	@GET
 	@Path("{numTrain}")
-	public Response getTrainByNumTrain(@PathParam("numTrain") String numTrain) {
-		Train train = Train.getTrainByNumTrain(numTrain);
+	public Response getTrainByNumTrain(@PathParam("numTrain") Integer numTrain) {
+		Train train = tt.getTrainById(numTrain);
 		return Response
 				.status(Status.OK)
-				.entity("<train>" + train + "</train>")
+				.entity(train)
 				.build();			
 
 	}
 	
 	@GET
 	@Path("search")
-	public Response getTrainsBySearch(@QueryParam("departure") String departure
-			, @QueryParam("arrival") String arrival
-			, @QueryParam("departureHour") int departureHour) {
+	public Response getTrainsBySearchingCities(@QueryParam("departure") String departure
+			, @QueryParam("arrival") String arrival) {
 		
-		List<Train> trains = Train.getTrainsBySearch(departure, arrival, departureHour);
+		List<Train> trains = tt.getTrainsBySearchingCities(departure, arrival);
         
         return Response
           .status(Status.OK)
-          .entity("<trains>" + trains + "</trains>")
+          .entity(trains)
           .build();
 		
 	}
-	
-	
 
 }

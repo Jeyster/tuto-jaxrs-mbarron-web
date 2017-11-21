@@ -13,19 +13,19 @@ public class Train {
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private String numTrain;
+	private Integer numTrain;
 	
 	private String villeDepart;
 	
 	private String villeArrivee;
 	
-    private int heureDepart; // Format : 1230 = 12h30
+    private Integer heureDepart; // Format : 1230 = 12h30
 
-	public String getNumTrain() {
+    public Integer getNumTrain() {
 		return numTrain;
 	}
 
-	public void setNumTrain(String numTrain) {
+	public void setNumTrain(Integer numTrain) {
 		this.numTrain = numTrain;
 	}
 
