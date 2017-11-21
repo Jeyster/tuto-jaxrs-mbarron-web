@@ -3,17 +3,13 @@ package soa.jaxrslabs.booktrainrestwebserviceexcercice2;
 import java.util.List;
 
 import javax.ejb.EJB;
-import javax.ws.rs.GET;
-import javax.ws.rs.POST;
-import javax.ws.rs.Path;
-import javax.ws.rs.PathParam;
-import javax.ws.rs.Produces;
-import javax.ws.rs.QueryParam;
+import javax.ws.rs.*;
+import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
 
 @Path("trains")
-@Produces("application/json")
+@Produces(MediaType.APPLICATION_JSON)
 public class TrainResource {
 
 	public TrainResource() {
@@ -21,6 +17,14 @@ public class TrainResource {
 	
 	@EJB
 	private TrainTransaction tt;
+
+	@OPTIONS
+	public Response getOptions() {
+		return Response.ok()
+				.header("Access-Control-Allow-Origin", "http://localhost:4200")
+				.header("Access-Control-Allow-Methods", "POST, GET, PUT, UPDATE, OPTIONS")
+				.header("Access-Control-Allow-Headers", "Content-Type, Accept, X-Requested-With, Access-Control-Allow-Origin").build();
+	}
 	
 	@POST
 	public Response createTrain(@QueryParam("departure") String departure, @QueryParam("arrival") String arrival, @QueryParam("departureTime") int departureTime) {
@@ -43,6 +47,9 @@ public class TrainResource {
 		List<Train> trains = tt.getTrains();		
 		return Response
 				.status(Status.OK)
+				.header("Access-Control-Allow-Origin", "http://localhost:4200")
+				.header("Access-Control-Allow-Methods", "POST, GET, PUT, UPDATE, OPTIONS")
+				.header("Access-Control-Allow-Headers", "Content-Type, Accept, X-Requested-With, Access-Control-Allow-Origin")
 				.entity(trains)
 				.build();
 	}
