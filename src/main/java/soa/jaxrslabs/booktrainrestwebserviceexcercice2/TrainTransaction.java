@@ -13,8 +13,9 @@ public class TrainTransaction {
 	@PersistenceContext(name="Catalogue")
 	EntityManager em;
 
-	public void addTrain(Train train) {
+	public Train addTrain(Train train) {
 		em.persist(train);
+		return train;
 	}
 	
 	public List<Train> getTrains() {
@@ -22,7 +23,7 @@ public class TrainTransaction {
 		return query.getResultList();
 	}
 
-	public Train getTrainById(Integer numTrain) {
+	public Train getTrainById(int numTrain) {
 		Train train = em.find(Train.class, numTrain);
 		return train;
 	}

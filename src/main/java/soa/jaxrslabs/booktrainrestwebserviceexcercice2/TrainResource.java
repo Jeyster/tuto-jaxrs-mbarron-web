@@ -23,7 +23,9 @@ public class TrainResource {
 		return Response.ok()
 				.header("Access-Control-Allow-Origin", "http://localhost:4200")
 				.header("Access-Control-Allow-Methods", "POST, GET, PUT, UPDATE, OPTIONS")
-				.header("Access-Control-Allow-Headers", "Content-Type, Accept, X-Requested-With, Access-Control-Allow-Origin").build();
+				.header("Access-Control-Allow-Headers", "Content-Type, Accept, X-Requested-With, Origin, Access-Control-Allow-Origin")
+				.header("Content-Type", "application/json")
+				.build();
 	}
 	
 	@POST
@@ -38,9 +40,46 @@ public class TrainResource {
 		
 		return Response
 				.status(Status.OK)
+				.header("Access-Control-Allow-Origin", "http://localhost:4200")
+				.header("Access-Control-Allow-Methods", "POST, GET, PUT, UPDATE, OPTIONS")
+				.header("Access-Control-Allow-Headers", "Content-Type, Accept, X-Requested-With, Access-Control-Allow-Origin")
 				.entity(train)
 				.build();
 	}
+
+	@POST
+	@Path("new-train")
+	@Consumes(MediaType.APPLICATION_JSON)
+	public Train createNewTrain(Train train) {
+
+		System.out.println("!!! ID : " + train.getNumTrain() + " !!!");
+		System.out.println("!!! Departure : " + train.getVilleDepart() + " !!!");
+
+		return tt.addTrain(train);
+
+	}
+
+	/*
+	@POST
+	@Path("new-train")
+	@Consumes(MediaType.APPLICATION_JSON)
+	public Response createNewTrain(Train train) {
+
+		System.out.println("!!! ID : " + train.getNumTrain() + " !!!");
+		System.out.println("!!! Departure : " + train.getVilleDepart() + " !!!");
+
+		tt.addTrain(train);
+
+		return Response
+				.status(Status.OK)
+				.header("Access-Control-Allow-Origin", "http://localhost:4200")
+				.header("Access-Control-Allow-Methods", "POST, GET, PUT, UPDATE, OPTIONS")
+				.header("Access-Control-Allow-Headers", "Content-Type, Accept, X-Requested-With, Origin, Access-Control-Allow-Origin")
+				.header("Content-Type", "application/json")
+				.entity(train)
+				.build();
+	}
+	*/
 	
 	@GET
 	public Response getTrains() {
@@ -56,7 +95,7 @@ public class TrainResource {
 	
 	@GET
 	@Path("{numTrain}")
-	public Response getTrainByNumTrain(@PathParam("numTrain") Integer numTrain) {
+	public Response getTrainByNumTrain(@PathParam("numTrain") int numTrain) {
 		Train train = tt.getTrainById(numTrain);
 		return Response
 				.status(Status.OK)
