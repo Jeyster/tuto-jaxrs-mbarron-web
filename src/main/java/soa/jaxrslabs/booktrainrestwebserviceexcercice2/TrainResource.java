@@ -18,16 +18,7 @@ public class TrainResource {
 	@EJB
 	private TrainTransaction tt;
 
-	@OPTIONS
-	public Response getOptions() {
-		return Response.ok()
-				.header("Access-Control-Allow-Origin", "http://localhost:4200")
-				.header("Access-Control-Allow-Methods", "POST, GET, PUT, UPDATE, OPTIONS")
-				.header("Access-Control-Allow-Headers", "Content-Type, Accept, X-Requested-With, Origin, Access-Control-Allow-Origin")
-				.header("Content-Type", "application/json")
-				.build();
-	}
-	
+
 	@POST
 	public Response createTrain(@QueryParam("departure") String departure, @QueryParam("arrival") String arrival, @QueryParam("departureTime") int departureTime) {
 		Train train = new Train();
@@ -40,9 +31,6 @@ public class TrainResource {
 		
 		return Response
 				.status(Status.OK)
-				.header("Access-Control-Allow-Origin", "http://localhost:4200")
-				.header("Access-Control-Allow-Methods", "POST, GET, PUT, UPDATE, OPTIONS")
-				.header("Access-Control-Allow-Headers", "Content-Type, Accept, X-Requested-With, Access-Control-Allow-Origin")
 				.entity(train)
 				.build();
 	}
@@ -50,12 +38,15 @@ public class TrainResource {
 	@POST
 	@Path("new-train")
 	@Consumes(MediaType.APPLICATION_JSON)
-	public Train createNewTrain(Train train) {
+	public Response createNewTrain(Train train) {
 
-		System.out.println("!!! ID : " + train.getNumTrain() + " !!!");
-		System.out.println("!!! Departure : " + train.getVilleDepart() + " !!!");
+		tt.addTrain(train);
 
-		return tt.addTrain(train);
+		List<Train> trains = tt.getTrains();
+		return Response
+				.status(Status.OK)
+				.entity(trains)
+				.build();
 
 	}
 
@@ -86,9 +77,6 @@ public class TrainResource {
 		List<Train> trains = tt.getTrains();		
 		return Response
 				.status(Status.OK)
-				.header("Access-Control-Allow-Origin", "http://localhost:4200")
-				.header("Access-Control-Allow-Methods", "POST, GET, PUT, UPDATE, OPTIONS")
-				.header("Access-Control-Allow-Headers", "Content-Type, Accept, X-Requested-With, Access-Control-Allow-Origin")
 				.entity(trains)
 				.build();
 	}
